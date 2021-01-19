@@ -101,3 +101,15 @@ class DigitClassifier:
             return self.model.predict(roi).argmax(axis=1)[0]
         else:
             return False
+
+    def analyze_boards(self, digit_images, info):
+        board_structure = {}
+        cells = []
+        [[cells.append(str(i) + str(j)) for j in range(info['GRID_LEN'])] for i in range(info['GRID_LEN'])]
+
+        for idx, digit in enumerate(digit_images):
+            if digit is not None:
+                prediction = self.predictDigitImage(digit)
+                board_structure[cells[idx]] = str(prediction)
+
+        return board_structure

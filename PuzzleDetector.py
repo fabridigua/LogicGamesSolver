@@ -5,6 +5,7 @@ import numpy as np
 from skimage.segmentation import clear_border
 import operator
 
+
 class PuzzleDetector:
     def __init__(self, game_info, game='sudoku'):
         self.GAME = game
@@ -42,13 +43,13 @@ class PuzzleDetector:
         cv2.drawContours(output, [approx], -1, (0, 255, 0), 2)
 
         bottom_right_index, _ = max(enumerate([pt[0][0] + pt[0][1] for pt in
-                                         polygon]), key=operator.itemgetter(1))
+                                               polygon]), key=operator.itemgetter(1))
         top_left_index, _ = min(enumerate([pt[0][0] + pt[0][1] for pt in
-                                     polygon]), key=operator.itemgetter(1))
+                                           polygon]), key=operator.itemgetter(1))
         bottom_left_index, _ = min(enumerate([pt[0][0] - pt[0][1] for pt in
-                                        polygon]), key=operator.itemgetter(1))
+                                              polygon]), key=operator.itemgetter(1))
         top_right_index, _ = max(enumerate([pt[0][0] - pt[0][1] for pt in
-                                      polygon]), key=operator.itemgetter(1))
+                                            polygon]), key=operator.itemgetter(1))
 
         top_left = tuple(polygon[top_left_index][0])
         top_right = tuple(polygon[top_right_index][0])
@@ -70,12 +71,13 @@ class PuzzleDetector:
             ]
         )
 
-        dst_polygon = np.array([[0, 0], [square_side - 1, 0], [square_side - 1, square_side - 1], [0, square_side - 1]], dtype='float32')
+        dst_polygon = np.array([[0, 0], [square_side - 1, 0], [square_side - 1, square_side - 1], [0, square_side - 1]],
+                               dtype='float32')
         m = cv2.getPerspectiveTransform(src_polygon, dst_polygon)
         img = cv2.warpPerspective(img, m, (int(square_side), int(square_side)))
 
         squares = []
-        grid_len = self.game_info['GRID_LEN']  # Es. 9
+        grid_len = self.game_info['GRID_LEN']  # Ex. 9
         side = img.shape[:1]
         side = side[0] / grid_len
         for j in range(grid_len):
@@ -85,13 +87,17 @@ class PuzzleDetector:
                 squares.append((p1, p2))
 
         digits = []
-        for square in squares:
-            square_roi = img[square[0][0]:square[1][0], square[0][1]:square[1][1]]
-            # cv2.imshow("Puzzle square_roi " + str(idx), square_roi)
+        for idx, square in enumerate(squares):
+            square_roi = img[square[0][1]:square[1][1], square[0][0]:square[1][0]]
+            # if idx == 8:
+            #     cv2.imshow("Puzzle square_roi ", square_roi)
             digits.append(self.extract_digit(square_roi))
 
-        cv2.imshow("Sudoku Puzzle Found", output)
-        cv2.imshow("Sudoku Puzzle Image", img)
+        output = cv2.putText(output, "Press Space when the puzzle is well seen", (30, output.shape[0] - 20),
+                             cv2.FONT_HERSHEY_DUPLEX, 0.75, color=(0, 255, 255))
+
+        cv2.imshow("Sudoku Puzzle Found", img)
+        cv2.imshow("Sudoku Puzzle Image", output)
 
         self.grid_image = img
         self.grid_digit_images = digits
