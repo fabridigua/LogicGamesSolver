@@ -3,13 +3,25 @@ from Solver import Solver
 from DigitClassifier import DigitClassifier
 
 import cv2
+import sys
+
+#TODO Arguments parser con sys
+
 
 info = {
-    'game': 'skyscrapers', # sudoku, stars, skyscrapers
+    'game': 'stars', # sudoku, stars, skyscrapers
     'GRID_LEN': 4,
-    'SQUARE_LEN': 3,
+    'SQUARE_LEN': 2,
     'NUM_STARS': 1
 }
+
+if len(sys.argv) > 1:#TODO check + controllo games
+    if sys.argv[1] is not None:
+        info['game'] = sys.argv[1]
+    if sys.argv[2] is not None:
+        info['GRID_LEN'] = sys.argv[2]
+    if sys.argv[3] is not None:
+        info['SQUARE_LEN'] = sys.argv[3]
 
 puzzle_detected = False
 puzzle_analyzed = False
@@ -19,7 +31,7 @@ detector = PuzzleDetector(info)
 classifier = DigitClassifier()
 solver = Solver(info)
 
-REAL_TIME = False
+REAL_TIME = True
 
 # 1. Board detection phase
 
@@ -69,7 +81,7 @@ if solved != "SOLVED":
     print("Error: ", solved)
     cv2.imshow("Impossible without solution (wrong ocr?)", solver.drawResult(detector.grid_image, digits_found))
 else:
-    print("Game solve?: ", solved)
+    print("Game solved?: ", solved)
     cv2.imshow("Game Solved", solver.drawResult(detector.grid_image, solver.result))
 
 cv2.waitKey(0)

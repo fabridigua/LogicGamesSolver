@@ -36,7 +36,18 @@ The execution consists of 2 phases:
 ## Project structure
 
 ```
-TODO	
+LogicGamesSolver
+│   README.md
+│   LICENSE
+│
+└───imgs
+│   │   screen_XXX	Screens for project explaination
+│   │   ...
+│	
+│   main.py		Main file to execute the software
+│   DigitClassifier.py		Class for digit classification with a pretrained CNN			
+│   PuzzleDetector.py	Class for puzzle detection and analyze from an image
+│   Solver.py		Class for solving the games given puzzle's informations and rules 		
 ```
 
 ## System Requirements
@@ -45,6 +56,25 @@ TODO
 
 - **Numpy 1.19.2**
 
-- **OpenCV 4.0.1** 
+- **OpenCV 4.0.1**
+
+- **Tensorflow 2.3.0**
 
   
+
+## Setup
+
+To run the project, clone it with [Git] and run the `main.py` file:
+
+[Git]: https://git-scm.com/downloads	"Git download page"
+
+```
+$ git clone https://github.com/fabridigua/LogicGamesSolver
+$ cd LogicGamesSolver
+$ python main.py sudoku 9 3
+```
+
+
+
+## How it works
+
