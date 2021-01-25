@@ -5,8 +5,8 @@ from DigitClassifier import DigitClassifier
 import cv2
 
 info = {
-    'game': 'sudoku', # sudoku, stars, skyscrapers
-    'GRID_LEN': 9,
+    'game': 'skyscrapers', # sudoku, stars, skyscrapers
+    'GRID_LEN': 4,
     'SQUARE_LEN': 3,
     'NUM_STARS': 1
 }
@@ -19,7 +19,7 @@ detector = PuzzleDetector(info)
 classifier = DigitClassifier()
 solver = Solver(info)
 
-REAL_TIME = True
+REAL_TIME = False
 
 # 1. Board detection phase
 
