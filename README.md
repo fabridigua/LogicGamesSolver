@@ -46,7 +46,7 @@ LogicGamesSolver
 │   │   ...
 │	
 │   main.py		Main file to execute the software
-│   DigitClassifier.py		Class for digit classification with a pretrained CNN			
+│   DigitClassifier.py	Class for digit classification with a pretrained CNN			
 │   PuzzleDetector.py	Class for puzzle detection and analyze from an image
 │   Solver.py		Class for solving the games given puzzle's informations and rules 		
 ```
