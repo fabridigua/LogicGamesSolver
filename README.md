@@ -97,7 +97,7 @@ This project touches many fields of study:
 
 ##### 1. Board Detection
 
-The software analyzes the image in input looking for the biggest *contour* in the scene.
+The software analyzes the image in input looking for the biggest *contour*<sup>[[1]](#cont_ref)</sup> in the scene.
 
 <img src="imgs\screen_sudoku_realtime_detection.png" style="zoom:80%;" />
 
@@ -109,18 +109,90 @@ In *real-time* mode,  the user must press `space` key to go ahead when the softw
 
 The software analyzes the puzzle board to retrieve the needed informations to solve the game.
 
-If the puzzle includes numbers (like *sudoku* and *skyscrapers*) a **Convolutional Neural Network** for digit classifying (trained with the fabulous *MNIST* dataset) is executed.
+If the puzzle includes numbers (like *sudoku* and *skyscrapers*) a **Convolutional Neural Network** for digit classifying (trained with the fabulous *MNIST*<sup>[[2]](#mnist_ref)</sup> dataset) is executed.
 
 <img src="imgs\screen_stars_realtime_analyzing.png" style="zoom:100%;" />
 
-For the *stars* game, the board image is processed to find the inner areas. Using OpenCV methods, the boldest contours are highlighted and then the *connected components* are analyzed (and drawn in different colors) to find the areas of the grid.
+For the *stars* game, the board image is processed to find the inner areas. Using OpenCV methods, the boldest contours are highlighted and then the *connected components*<sup>[[3]](#connected_ref)</sup> are analyzed (and drawn in different colors) to find the areas of the grid.
 
 ##### 3. Game solving
 
-Once collected all the informations about the structure of the puzzle, the game is represented as a CSP (Constraint Satisfaction Problem) and solved applying a backtracking algorithm. By the game point of view, the CSP consists in 3 elements:
+Once collected all the informations about the structure of the puzzle, the game is represented as a CSP (Constraint Satisfaction Problem) and solved applying a backtracking algorithm. By the game point of view, the CSP<sup>[[4]](#csp_ref)</sup> consists in 3 elements:
 
-	1. *Variables*: the grid cells to fill
- 	2. *Domains*: the sets of values that each cell can assume
- 	3. *Constraints*: the game's rules
+- *Variables*: the grid cells to fill
 
-If the input is correct, the algorithm finds the solution with 100% of accuracy, but it can takes a long time basing on grid length (and so the number of variables) and size of domains. For a normal *Sudoku* scheme it take 3-5 seconds.
+- *Domains*: the sets of values that each cell can assume
+
+- *Constraints*: the game's rules
+
+If the input is correct, the algorithm finds the solution with 100% of accuracy, but it can takes a long time basing on grid length (and so the number of variables) and size of domains. For a normal *Sudoku* scheme it takes 3-5 seconds.
+
+For more details see the article.
+
+## Games Included
+
+For now, this projects includes the detection and solving procedures of these games:
+
+- **Sudoku** [ ex. `python main.py sudoku 9 3`  ] 
+
+  *Description*: given a grid with some number in range [1,9] fill the empty cell respecting the rules  
+
+  *Parameters*: 
+
+  ​	**grid_len**: number of squares in each row, column and inner area (usually 9) 
+
+  ​	**square_len**: number of square in each row and column of a inner area (usually 3) 
+
+  *Rules*: 
+
+  	- Every row, column and area have to contain all number between 1 and 9
+
+
+
+- **Stars** [ex.  `python main.py stars 8 1`  ] 
+
+  *Description*: given a grid divided into regions insert a star in each row, column and sector
+
+  *Parameters*: 
+
+  ​	**grid_len**: number of squares in each row and column
+
+  ​	**star_number**: number of stars in a inner area (usually 1) 
+
+  *Rules*: 
+
+  	- Every row, column and sector have to contain only a star (or more if setted with *star_number* argument)
+  	- Stars can't be in adjacent cells
+
+
+
+- **Skyscrapers** [ ex. `python main.py skyscrapers 8`  ] 
+
+  *Description*: given a grid with some numbers near the sides, fill the grid with the number from 1 to **grid_len**
+
+  *Parameters*: 
+
+  ​	**grid_len**: number of squares in each row and column
+
+  *Rules*: 
+
+  	- Every row, column and have to contain all number between 1 and **grid_len**
+  	- The numbers along the edge of the puzzle indicate the number of buildings which you would see from that direction if there was a series of skyscrapers with heights equal the entries in that row or column.
+
+## References
+
+<a name="cont_ref">[1]</a>:  [**Contours : Getting Started**]
+
+[Contours : Getting Started]: https://docs.opencv.org/3.4/d4/d73/tutorial_py_contours_begin.html	"Contours : Getting Started"
+
+<a name="mnist_ref">[2]</a>:  [MNIST Dataset]
+
+[MNIST Dataset]: http://yann.lecun.com/exdb/mnist/	"MNIST Dataset"
+
+<a name="connected_ref">[3]</a>:  [The connected-component labeling problem: A review of state-of-the-art algorithms]
+
+[The connected-component labeling problem: A review of state-of-the-art algorithms]: https://www.sciencedirect.com/science/article/pii/S0031320317301693	"The connected-component labeling problem: A review of state-of-the-art algorithms"
+
+<a name="csp_ref">[4]</a>:  [Constraint satisfaction problem]
+
+[Constraint satisfaction problem]: https://en.wikipedia.org/wiki/Constraint_satisfaction_problem	"Constraint satisfaction problem"
