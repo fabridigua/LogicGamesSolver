@@ -19,9 +19,9 @@ if len(sys.argv) > 1:#TODO check + controllo games
     if sys.argv[1] is not None:
         info['game'] = sys.argv[1]
     if sys.argv[2] is not None:
-        info['GRID_LEN'] = sys.argv[2]
+        info['GRID_LEN'] = int(sys.argv[2])
     if sys.argv[3] is not None:
-        info['SQUARE_LEN'] = sys.argv[3]
+        info['SQUARE_LEN'] = int(sys.argv[3])
 
 puzzle_detected = False
 puzzle_analyzed = False
