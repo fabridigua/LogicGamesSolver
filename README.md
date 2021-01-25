@@ -181,7 +181,7 @@ For now, this projects includes the detection and solving procedures of these ga
 
 ## References
 
-<a name="cont_ref">[1]</a>:  [**Contours : Getting Started**]
+<a name="cont_ref">[1]</a>:  [Contours : Getting Started]
 
 [Contours : Getting Started]: https://docs.opencv.org/3.4/d4/d73/tutorial_py_contours_begin.html	"Contours : Getting Started"
 
