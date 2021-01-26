@@ -127,7 +127,7 @@ Once collected all the informations about the structure of the puzzle, the game 
 
 If the input is correct, the algorithm finds the solution with 100% of accuracy, but it can takes a long time basing on grid length (and so the number of variables) and size of domains. For a normal *Sudoku* scheme it takes 3-5 seconds.
 
-![](imgs\screen_sudoku_board_solved.png)
+<img src="imgs\screen_sudoku_board_solved.png" style="zoom:100%;" />
 
 For more details see the article.
 
