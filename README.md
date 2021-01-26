@@ -1,5 +1,5 @@
 # LogicGamesSolver
- Python tool to solve logic games with AI, Computer Vision and a bit of Deep Learning. 
+ Python tool for solving logic games with AI, Computer Vision and a pinch of Deep Learning. 
 
 ----------------
 
@@ -19,14 +19,14 @@
 
 ## Basic Overview
 
-This project mixes Computer Vision and Artificial Intelligence to solve logic puzzle games like *Sudoku*, *Stars Battle* and *Skyscrapers*.
+This project combines Computer Vision and Artificial Intelligence to solve logic puzzle games like *Sudoku*, *Stars Battle* and *Skyscrapers*.
 
 The execution consists of 2 phases:
 
 | 1. Board Detection                                           | 2. Game solving                                              |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | <img src="imgs/screen_stars_board_found.png" style="zoom:100%;" /> | <img src="imgs/screen_stars_board_solved.png" style="zoom:100%;" /> |
-| The software detects the board showed by the user (in real-time or analyzing a local image). Then analyzes the structure to understand the needed informations to solve the game. | The informations collected are then used to solve the puzzle considering it as a Constraints Satisfaction Problem using a Backtracking algorithm to find the solution, given the game rules. |
+| The software detects the board showed by the user (in real-time or analyzing a local image). Then analyzes the structure to understand the needed informations to solve the game. | The information collected is then used to solve the puzzle considering it as a Constraints Satisfaction Problem using a Backtracking algorithm to find the solution, given the game rules. |
 
 **Language**: *Python*
 
@@ -101,7 +101,7 @@ The software analyzes the image in input looking for the biggest *contour*<sup>[
 
 <img src="imgs\screen_sudoku_realtime_detection.png" style="zoom:80%;" />
 
-Once found the puzzle, its image is warped applying a perspective transformation to make the puzzle image plane.
+Once found the puzzle, its image is warped applying a perspective transformation to make the puzzle image a plane.
 
 In *real-time* mode,  the user must press `space` key to go ahead when the software is recognizing well the puzzle.
 
@@ -109,11 +109,11 @@ In *real-time* mode,  the user must press `space` key to go ahead when the softw
 
 The software analyzes the puzzle board to retrieve the needed informations to solve the game.
 
-If the puzzle includes numbers (like *sudoku* and *skyscrapers*) a **Convolutional Neural Network** for digit classifying (trained with the fabulous *MNIST*<sup>[[2]](#mnist_ref)</sup> dataset) is executed.
+If the puzzle includes numbers (like  *Sudoku* and *Skyscrapers*) a **Convolutional Neural Network** for digit classifying (trained with the fabulous *MNIST*<sup>[[2]](#mnist_ref)</sup> dataset) is executed.
 
 <img src="imgs\screen_stars_realtime_analyzing.png" style="zoom:100%;" />
 
-For the *stars* game, the board image is processed to find the inner areas. Using OpenCV methods, the boldest contours are highlighted and then the *connected components*<sup>[[3]](#connected_ref)</sup> are analyzed (and drawn in different colors) to find the areas of the grid.
+For the *Stars* game, the board image is processed to find the inner areas. Using *OpenCV* methods, the boldest contours are highlighted and then the *connected components*<sup>[[3]](#connected_ref)</sup> are analyzed (and drawn in different colors) to find the areas of the grid.
 
 ##### 3. Game solving
 
@@ -135,7 +135,7 @@ For now, this projects includes the detection and solving procedures of these ga
 
 - **Sudoku** [ ex. `python main.py sudoku 9 3`  ] 
 
-  *Description*: given a grid with some number in range [1,9] fill the empty cell respecting the rules  
+  *Description*: given a grid with some number in range [1,9] , fill the empty cells respecting the rules.  
 
   *Parameters*: 
 
@@ -151,7 +151,7 @@ For now, this projects includes the detection and solving procedures of these ga
 
 - **Stars** [ex.  `python main.py stars 8 1`  ] 
 
-  *Description*: given a grid divided into regions insert a star in each row, column and sector
+  *Description*: given a grid divided into regions insert a star in each row, column and sector.
 
   *Parameters*: 
 
@@ -168,7 +168,7 @@ For now, this projects includes the detection and solving procedures of these ga
 
 - **Skyscrapers** [ ex. `python main.py skyscrapers 8`  ] 
 
-  *Description*: given a grid with some numbers near the sides, fill the grid with the number from 1 to **grid_len**
+  *Description*: given a grid with some numbers near the sides, fill the grid with the number from 1 to **grid_len**.
 
   *Parameters*: 
 
