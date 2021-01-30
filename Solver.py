@@ -467,13 +467,14 @@ class Solver:
         result_values = list(result.values())
         sudoku = ''
         for k in range(self.GRID_LEN * self.GRID_LEN):
-            sudoku += result_values[k] + ' '
-            if (k + 1) % self.SQUARE_LEN == 0:
-                sudoku += '| '
-            if (k + 1) % (self.SQUARE_LEN * self.SQUARE_LEN) == 0:
-                sudoku += '\n'
-            if (k + 1) % (self.GRID_LEN * self.SQUARE_LEN) == 0:
-                sudoku += '\n'
+            if result_values[k] is not None:
+                sudoku += result_values[k] + ' '
+                if (k + 1) % self.SQUARE_LEN == 0:
+                    sudoku += '| '
+                if (k + 1) % (self.SQUARE_LEN * self.SQUARE_LEN) == 0:
+                    sudoku += '\n'
+                if (k + 1) % (self.GRID_LEN * self.SQUARE_LEN) == 0:
+                    sudoku += '\n'
 
         print(sudoku)
 

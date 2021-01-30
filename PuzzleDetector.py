@@ -2,6 +2,7 @@
 
 import cv2
 import numpy as np
+np.seterr(divide='ignore', invalid='ignore')
 from skimage.segmentation import clear_border
 import operator
 
@@ -64,17 +65,14 @@ class PuzzleDetector:
         side = side[0] / grid_len
         for j in range(grid_len):
             for i in range(grid_len):
-                p1 = (int(i * side), int(j * side))  # Top left corner of a box
-                p2 = (int((i + 1) * side), int((j + 1) * side))  # Bottom right corner
+                p1 = (int(i * side), int(j * side))
+                p2 = (int((i + 1) * side), int((j + 1) * side))
                 squares.append((p1, p2))
 
         digits = []
         for idx, square in enumerate(squares):
             square_roi = img[square[0][1]:square[1][1], square[0][0]:square[1][0]]
-            extracted_digit = self.extract_digit(square_roi) if idx != 77 else self.extract_digit(square_roi, True)
-            if extracted_digit is not None:
-                if idx == 77:
-                    cv2.imshow("Puzzle square_roi ", extracted_digit)
+            extracted_digit = self.get_digit(square_roi) if idx != 77 else self.get_digit(square_roi, True)
             digits.append(extracted_digit)
 
         output = cv2.putText(output, "Press Space when the puzzle is well seen", (30, output.shape[0] - 20),
@@ -108,8 +106,7 @@ class PuzzleDetector:
         cv2.circle(output, bottom_right, 4, (0, 0, 255), -1)
         cv2.circle(output, bottom_left, 4, (0, 0, 255), -1)
 
-        src_polygon = np.array([top_left, top_right, bottom_right, bottom_left], dtype='float32')
-        square_side = max(
+        size = max(
             [
                 self.distance(top_left, top_right),
                 self.distance(top_left, bottom_left),
@@ -117,11 +114,11 @@ class PuzzleDetector:
                 self.distance(bottom_right, top_right)
             ]
         )
-
-        dst_polygon = np.array([[0, 0], [square_side - 1, 0], [square_side - 1, square_side - 1], [0, square_side - 1]],
+        src_polygon = np.array([top_left, top_right, bottom_right, bottom_left], dtype='float32')
+        dst_polygon = np.array([[0, 0], [size - 1, 0], [size - 1, size - 1], [0, size - 1]],
                                dtype='float32')
         m = cv2.getPerspectiveTransform(src_polygon, dst_polygon)
-        img = cv2.warpPerspective(img, m, (int(square_side), int(square_side)))
+        img = cv2.warpPerspective(img, m, (int(size), int(size)))
         warped = img.copy()
 
         output = cv2.putText(output, "Press Space when the puzzle is well seen", (30, output.shape[0] - 20),
@@ -132,18 +129,12 @@ class PuzzleDetector:
         img = cv2.erode(img, kernel, iterations=1)
         _, img = cv2.threshold(img, 100, 255, cv2.THRESH_BINARY)
         num_labels, labels = cv2.connectedComponents(img)
-
-        # Map component labels to hue val, 0-179 is the hue range in OpenCV
         if num_labels == 0:
             return
-        label_hue = np.uint8(179 * labels / np.max(labels))  # todo divide for 0
+        label_hue = np.uint8(179 * labels / np.max(labels))
         blank_ch = 255 * np.ones_like(label_hue)
         labeled_img = cv2.merge([label_hue, blank_ch, blank_ch])
-
-        # Converting cvt to BGR
         labeled_img = cv2.cvtColor(labeled_img, cv2.COLOR_HSV2BGR)
-
-        # set bg label to black
         labeled_img[label_hue == 0] = 0
         cv2.imshow("Stars Puzzle - Area detection", labeled_img)
 
@@ -198,8 +189,7 @@ class PuzzleDetector:
 
         squares = []
         grid_len = self.game_info['GRID_LEN']  # Ex. 9
-        side = img.shape[:1]
-        side = side[0] / (grid_len + 2)
+        side = img.shape[:1][0] / (grid_len + 2)
         exclude = ['00', '0' + str(grid_len + 1), str(grid_len + 1) + '0', str(grid_len + 1) + str(grid_len + 1)]
         for i in range(1, grid_len + 1):
             [exclude.append(str(i) + str(j)) for j in range(1, grid_len + 1)]
@@ -211,13 +201,20 @@ class PuzzleDetector:
                     squares.append((p1, p2))
                     # print(str(j) + str(i))
 
+        squares = []
+        grid_len = self.game_info['GRID_LEN']  # Ex. 9
+        side = img.shape[:1][0] / (grid_len)
+        for j in range(grid_len):
+            for i in range(grid_len):
+                p1 = (int(i * side), int(j * side))
+                p2 = (int((i + 1) * side), int((j + 1) * side))
+                squares.append((p1, p2))
+
         digits = []
         for idx, square in enumerate(squares):
             square_roi = img[square[0][1]:square[1][1], square[0][0]:square[1][0]]
-            extracted_digit = self.extract_digit(square_roi) if idx != 3 else self.extract_digit(square_roi, True)
+            extracted_digit = self.get_digit(square_roi)
             if extracted_digit is not None:
-                if idx == len(squares) - 1:
-                    cv2.imshow("Puzzle extracted_digit ", extracted_digit)
                 digits.append(extracted_digit)
 
         output = cv2.putText(output, "Press Space when the puzzle is well seen", (30, output.shape[0] - 20),
@@ -251,7 +248,7 @@ class PuzzleDetector:
         b = p2[1] - p1[1]
         return np.sqrt((a ** 2) + (b ** 2))
 
-    def extract_digit(self, cell_roi, show=False):
+    def get_digit(self, cell_roi, show=False):
         cell_roi = cv2.cvtColor(cell_roi, cv2.COLOR_BGR2GRAY)
         if show:
             cv2.imshow("DEBUG", cell_roi)

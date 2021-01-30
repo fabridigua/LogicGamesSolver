@@ -4,12 +4,13 @@ from DigitClassifier import DigitClassifier
 
 import cv2
 import sys
+from timeit import default_timer as timer
 
 #TODO Arguments parser con sys
 
 
 info = {
-    'game': 'stars', # sudoku, stars, skyscrapers
+    'game': 'sudoku', # sudoku, stars, skyscrapers
     'GRID_LEN': 4,
     'SQUARE_LEN': 2,
     'NUM_STARS': 1
@@ -59,7 +60,9 @@ else:
 
 print('Digits found ', str(len([d for d in detector.grid_digit_images if d is not None])))
 
+
 # 2. Board analyze phase
+start = timer()
 
 digits_found = {}
 if info['game'] == 'sudoku':
@@ -77,12 +80,15 @@ data = {
 }
 solved = solver.solveGame(data)
 
+# cv2.imshow("Digits found", solver.drawResult(detector.grid_image, digits_found))
+end = timer()
+print(end - start, " seconds")
 if solved != "SOLVED":
     print("Error: ", solved)
     cv2.imshow("Impossible without solution (wrong ocr?)", solver.drawResult(detector.grid_image, digits_found))
 else:
     print("Game solved?: ", solved)
-    cv2.imshow("Game Solved", solver.drawResult(detector.grid_image, solver.result))
+    cv2.imshow("Game Solved in "+ str(end - start)+" seconds", solver.drawResult(detector.grid_image, solver.result))
 
 cv2.waitKey(0)
 

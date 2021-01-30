@@ -134,6 +134,7 @@ class DigitClassifier:
     def get_sudoku_digits(self, info):
         digits_found = {}
         predictions = []
+        self.exclude_classes = [x for x in range(10) if x not in [n for n in range(1, info['GRID_LEN'] + 1)]]
         for board in self.puzzles:
             digits = self.analyze_boards(board, info)
             print(digits)
